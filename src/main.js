@@ -34,6 +34,7 @@ const btnRepeat = $('btnRepeat');
 const btnMute = $('btnMute');
 const btnQueue = $('btnQueue');
 const btnClearQueue = $('btnClearQueue');
+const btnDrawerShuffle = $('btnDrawerShuffle');
 const btnDrawerClose = $('btnDrawerClose');
 const volume = $('volume');
 const seek = $('seek');
@@ -434,6 +435,28 @@ function resetPlayer() {
   renderQueue();
 }
 
+async function shufflePlayQueue() {
+  const n = state.tracks.length;
+  if (!n) return;
+
+  state.shuffle = true;
+  btnShuffle.classList.add('is-on');
+  btnShuffle.setAttribute('aria-pressed', 'true');
+  saveSettings();
+
+  let pick = 0;
+  if (n > 1) {
+    pick = Math.floor(Math.random() * n);
+    if (pick === state.index && n > 1) {
+      pick = (pick + 1) % n;
+    }
+  }
+
+  showToast('Shuffle play', 1500);
+  await playIndex(pick, { autoplay: true });
+  pokeActivity();
+}
+
 /* ---------------- Queue UI ---------------- */
 
 function renderQueue() {
@@ -442,6 +465,17 @@ function renderQueue() {
   queueCount.textContent = n ? `${n} track${n === 1 ? '' : 's'} in queue` : 'No tracks yet';
   if (btnClearQueue) {
     btnClearQueue.hidden = n === 0;
+  }
+  if (btnDrawerShuffle) {
+    btnDrawerShuffle.hidden = n === 0;
+  }
+  const drawerAdd = $('drawerAdd');
+  if (drawerAdd) {
+    drawerAdd.classList.toggle('is-full', n === 0);
+    const span = drawerAdd.querySelector('span');
+    if (span) {
+      span.textContent = n === 0 ? 'Add audio files' : 'Add audio';
+    }
   }
 
   if (!n) {
@@ -1195,6 +1229,7 @@ volume.addEventListener('input', () => setVolume(Number(volume.value) / 100));
 btnQueue.addEventListener('click', () => setDrawer(!drawer.classList.contains('is-open')));
 btnDrawerClose.addEventListener('click', () => setDrawer(false));
 btnClearQueue?.addEventListener('click', clearQueue);
+btnDrawerShuffle?.addEventListener('click', shufflePlayQueue);
 scrim.addEventListener('click', () => setDrawer(false));
 
 $('btnFullscreen').addEventListener('click', async () => {
@@ -1243,6 +1278,9 @@ document.addEventListener('keydown', (event) => {
       break;
     case 'KeyM':
       setMuted(!state.muted);
+      break;
+    case 'KeyS':
+      btnShuffle.click();
       break;
     case 'KeyV':
       setScene(state.scene + (event.shiftKey ? -1 : 1), true);
@@ -1485,6 +1523,7 @@ window.__prism = {
   playIndex,
   setScene,
   clearQueue,
+  shufflePlayQueue,
   loadTracks,
   engine,
   spectrum,

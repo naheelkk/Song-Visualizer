@@ -1402,26 +1402,77 @@ body.player-hidden .mini-player {
   color: var(--muted);
 }
 
-.drawer-drop {
+.drawer-toolbar {
   display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.drawer-btn {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 46px;
+  height: 44px;
   border-radius: 12px;
-  border: 1px dashed rgba(255, 255, 255, 0.16);
-  color: var(--muted-strong);
   font-size: 12.5px;
   font-weight: 500;
-  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.22s var(--ease);
+  user-select: none;
+  white-space: nowrap;
 }
 
-.drawer-drop svg {
+.drawer-shuffle-btn {
+  flex: 1.25;
+  background: linear-gradient(135deg, var(--accent-soft), var(--accent-2-soft));
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #fff;
+  box-shadow: 0 4px 18px -4px var(--accent-soft);
+}
+
+.drawer-shuffle-btn svg {
+  width: 16px;
+  height: 16px;
+  color: var(--accent);
+  transition: transform 0.25s var(--ease);
+}
+
+.drawer-shuffle-btn:hover {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #05060a;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px -6px var(--accent);
+}
+
+.drawer-shuffle-btn:hover svg {
+  color: #05060a;
+  transform: rotate(180deg);
+}
+
+.drawer-shuffle-btn:active {
+  transform: translateY(0);
+}
+
+.drawer-add-btn {
+  flex: 1;
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--muted-strong);
+}
+
+.drawer-add-btn.is-full {
+  flex: 1 1 100%;
+}
+
+.drawer-add-btn svg {
   width: 16px;
   height: 16px;
 }
 
-.drawer-drop:hover {
+.drawer-add-btn:hover {
   border-color: var(--accent);
   color: var(--text);
   background: var(--accent-soft);
