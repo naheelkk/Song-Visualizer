@@ -17,6 +17,7 @@ const $ = (id) => document.getElementById(id);
 const stage = $('stage');
 const sctx = stage.getContext('2d');
 const empty = $('empty');
+const sceneBar = $('sceneBar');
 const sceneName = $('sceneName');
 const sceneKicker = $('sceneKicker');
 const sceneChips = $('sceneChips');
@@ -332,6 +333,7 @@ async function playIndex(index, { autoplay = true } = {}) {
     if (!started) showToast('Press play to start the audio.', 2600);
   }
   updateTransport();
+  pokeActivity();
 }
 
 function nextIndex({ auto = false } = {}) {
@@ -530,6 +532,7 @@ function setDrawer(open) {
     renderQueue();
     scrollQueueActive();
   }
+  pokeActivity();
 }
 
 /* ---------------- Equalizer & view panel ---------------- */
@@ -757,6 +760,7 @@ function setEqPanel(open) {
     drawEqCurve();
     requestAnimationFrame(drawEqCurve);
   }
+  pokeActivity();
 }
 
 function setHidePlayer(hidden, notify = true) {
@@ -981,6 +985,7 @@ function handleSeekMove(event) {
 seek.addEventListener('pointerdown', async (event) => {
   if (!engine.ready) return;
   scrubbing = true;
+  pokeActivity();
   seek.setPointerCapture(event.pointerId);
   handleSeekMove(event);
   const time = seekFromEvent(event);
@@ -991,6 +996,7 @@ seek.addEventListener('pointerdown', async (event) => {
 
 seek.addEventListener('pointermove', (event) => {
   handleSeekMove(event);
+  pokeActivity();
   if (!scrubbing) return;
   const time = seekFromEvent(event);
   if (time != null) engine.seek(time);
@@ -1006,6 +1012,7 @@ function endScrub(event) {
   } catch {
     /* already released */
   }
+  pokeActivity();
 }
 
 seek.addEventListener('pointerup', endScrub);
@@ -1062,6 +1069,55 @@ window.addEventListener('blur', () => {
   dropOverlay.classList.remove('is-active');
 });
 
+/* ---------------- Auto-hide controls during playback ---------------- */
+
+let idleTimer = null;
+let isHoveringControls = false;
+const IDLE_TIMEOUT_MS = 3500;
+
+function isOverlayActive() {
+  return (
+    drawer.classList.contains('is-open') ||
+    eqPanel.classList.contains('is-open') ||
+    dropOverlay.classList.contains('is-active')
+  );
+}
+
+function setIdle(idle) {
+  if (idle) {
+    if (!engine.playing || isOverlayActive() || isHoveringControls || scrubbing) return;
+    document.body.classList.add('is-idle');
+  } else {
+    document.body.classList.remove('is-idle');
+  }
+}
+
+function pokeActivity() {
+  setIdle(false);
+  clearTimeout(idleTimer);
+  if (engine.playing && !isOverlayActive() && !isHoveringControls && !scrubbing) {
+    idleTimer = window.setTimeout(() => setIdle(true), IDLE_TIMEOUT_MS);
+  }
+}
+
+// User activity listeners
+['pointermove', 'pointerdown', 'keydown', 'wheel', 'touchstart'].forEach((eventName) => {
+  window.addEventListener(eventName, pokeActivity, { passive: true });
+});
+
+// Do not hide when the cursor is over interactive controls
+[player, sceneBar, document.querySelector('.topbar'), eqPanel, drawer].forEach((el) => {
+  if (!el) return;
+  el.addEventListener('pointerenter', () => {
+    isHoveringControls = true;
+    pokeActivity();
+  });
+  el.addEventListener('pointerleave', () => {
+    isHoveringControls = false;
+    pokeActivity();
+  });
+});
+
 /* ---------------- Transport bindings ---------------- */
 
 async function togglePlayback() {
@@ -1080,6 +1136,7 @@ async function togglePlayback() {
     if (!ok) showToast('Playback was blocked. Tap play again.', 2600);
   }
   updateTransport();
+  pokeActivity();
 }
 
 btnPlay.addEventListener('click', togglePlayback);
@@ -1228,6 +1285,7 @@ document.addEventListener('keydown', (event) => {
 /* ---------------- Engine events ---------------- */
 
 engine.onended = () => {
+  pokeActivity();
   if (state.repeat === 'one') {
     engine.seek(0).then(() => engine.play());
     updateTransport();

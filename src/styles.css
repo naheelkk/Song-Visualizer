@@ -114,6 +114,7 @@ svg {
   justify-content: space-between;
   padding: 22px 28px;
   pointer-events: none;
+  transition: opacity 0.45s var(--ease), transform 0.45s var(--ease);
 }
 
 .topbar > * {
@@ -401,12 +402,11 @@ body.is-desktop .topbar .window-controls {
   left: 28px;
   right: 28px;
   bottom: 154px;
-  transition: bottom 0.55s var(--ease), right 0.55s var(--ease);
   z-index: 20;
   display: flex;
   align-items: flex-end;
   gap: 24px;
-  transition: bottom 0.4s var(--ease);
+  transition: bottom 0.55s var(--ease), right 0.55s var(--ease), opacity 0.45s var(--ease), transform 0.45s var(--ease);
 }
 
 .scene-meta {
@@ -527,6 +527,36 @@ body.player-hidden .player {
 body.player-hidden .scene-bar {
   bottom: 28px;
   right: 132px;
+}
+
+/* ---------- Idle / Cinematic auto-hide ---------- */
+
+body.is-idle {
+  cursor: none;
+}
+
+body.is-idle .player {
+  opacity: 0;
+  transform: translateY(calc(100% + 40px));
+  pointer-events: none;
+}
+
+body.is-idle .scene-bar {
+  opacity: 0;
+  transform: translateY(30px);
+  pointer-events: none;
+}
+
+body.is-idle .topbar {
+  opacity: 0;
+  transform: translateY(-24px);
+  pointer-events: none;
+}
+
+body.is-idle .mini-player {
+  opacity: 0;
+  transform: translateY(40px);
+  pointer-events: none;
 }
 
 .player:hover {
@@ -1827,6 +1857,162 @@ body.player-hidden .mini-player {
 
   .player-wave {
     opacity: 0.6;
+  }
+}
+
+/* ---------- Mobile Landscape / Horizontal View ---------- */
+
+@media (orientation: landscape) and (max-height: 540px), (max-height: 480px) {
+  .topbar {
+    padding: 6px 16px;
+  }
+
+  .brand-text {
+    display: none;
+  }
+
+  .scene-bar {
+    left: 12px;
+    right: 12px;
+    bottom: calc(54px + var(--safe-bottom));
+    gap: 8px;
+  }
+
+  .scene-meta {
+    display: none;
+  }
+
+  .chips {
+    padding: 2px 2px 4px;
+    gap: 5px;
+  }
+
+  .chip {
+    height: 25px;
+    padding: 0 10px;
+    font-size: 10.5px;
+  }
+
+  .player {
+    left: 10px;
+    right: 10px;
+    bottom: calc(6px + var(--safe-bottom));
+    padding: 5px 12px;
+    border-radius: 14px;
+    grid-template-columns: minmax(110px, 1.1fr) minmax(170px, 2.2fr) auto;
+    grid-template-areas: none;
+    row-gap: 0;
+    gap: 10px;
+  }
+
+  .now {
+    grid-area: auto;
+    gap: 7px;
+  }
+
+  .cover {
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+  }
+
+  .track-title {
+    font-size: 11.5px;
+    max-width: 130px;
+  }
+
+  .track-sub {
+    font-size: 9.5px;
+    max-width: 130px;
+  }
+
+  .badge {
+    display: none;
+  }
+
+  .center {
+    grid-area: auto;
+    gap: 2px;
+  }
+
+  .transport {
+    gap: 5px;
+  }
+
+  .tbtn {
+    width: 24px;
+    height: 24px;
+  }
+
+  .tbtn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .playbtn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .playbtn svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .timeline {
+    gap: 5px;
+  }
+
+  .time {
+    font-size: 9px;
+    width: 26px;
+  }
+
+  .side {
+    grid-area: auto;
+    gap: 2px;
+  }
+
+  .volume,
+  #btnShuffle,
+  #btnRepeat {
+    display: none;
+  }
+
+  body.player-hidden .scene-bar {
+    bottom: calc(10px + var(--safe-bottom));
+  }
+
+  .drawer {
+    width: min(340px, 85vw);
+  }
+
+  .eq-panel {
+    bottom: calc(56px + var(--safe-bottom));
+    max-height: 82vh;
+    padding: 12px;
+  }
+
+  .empty {
+    padding: 30px 16px 100px;
+  }
+
+  .empty h1 {
+    font-size: clamp(24px, 5vw, 32px);
+  }
+
+  .empty-copy {
+    font-size: 11.5px;
+    margin-top: 6px;
+  }
+
+  .cta {
+    padding: 8px 16px;
+    font-size: 12.5px;
+  }
+
+  .toast {
+    bottom: 70px;
   }
 }
 
