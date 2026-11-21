@@ -1911,22 +1911,189 @@ body.player-hidden .mini-player {
   }
 }
 
-/* ---------- Mobile Landscape / Horizontal View ---------- */
+/* ---------- Mobile Landscape / Horizontal View: Player on Right-Hand Side ---------- */
 
 @media (orientation: landscape) and (max-height: 540px), (max-height: 480px) {
+  :root {
+    --player-landscape-w: min(270px, 34vw);
+  }
+
   .topbar {
-    padding: 6px 16px;
+    padding: 8px 14px;
+    right: calc(var(--player-landscape-w) + 16px);
   }
 
   .brand-text {
     display: none;
   }
 
-  .scene-bar {
-    left: 12px;
-    right: 12px;
-    bottom: calc(54px + var(--safe-bottom));
+  .glass-btn {
+    height: 32px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+
+  .glass-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Right-hand side docked player */
+  .player {
+    position: fixed;
+    top: calc(8px + var(--safe-top));
+    bottom: calc(8px + var(--safe-bottom));
+    right: calc(8px + var(--safe-right));
+    left: auto;
+    width: var(--player-landscape-w);
+    max-width: 290px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 18px;
+    background: var(--panel);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: -10px 0 35px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(30px) saturate(1.45);
+    -webkit-backdrop-filter: blur(30px) saturate(1.45);
+    z-index: 28;
+    transform: none;
+    transition: transform 0.45s var(--ease), opacity 0.4s var(--ease);
+  }
+
+  body.is-idle .player,
+  body.player-hidden .player {
+    opacity: 0;
+    transform: translateX(calc(100% + 20px));
+    pointer-events: none;
+  }
+
+  /* Top of player card: Album art & track meta */
+  .now {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .cover {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .meta {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .track-title {
+    font-size: 12px;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .track-sub {
+    font-size: 10px;
+    margin-top: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .badge {
+    display: none;
+  }
+
+  /* Center of player card: Controls & Seek bar */
+  .center {
+    display: flex;
+    flex-direction: column;
     gap: 8px;
+    width: 100%;
+  }
+
+  .transport {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .tbtn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .tbtn svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .playbtn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .playbtn svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .timeline {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+  }
+
+  .time {
+    font-size: 9.5px;
+    width: 28px;
+  }
+
+  .seek {
+    height: 14px;
+  }
+
+  /* Bottom of player card: Secondary actions */
+  .side {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 4px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .volume {
+    display: none;
+  }
+
+  /* Visualizer stage stays full-screen; Scene bar docks bottom left */
+  .scene-bar {
+    left: calc(12px + var(--safe-left));
+    right: calc(var(--player-landscape-w) + 20px);
+    bottom: calc(8px + var(--safe-bottom));
+    gap: 8px;
+  }
+
+  body.is-idle .scene-bar {
+    opacity: 0;
+    transform: translateY(24px);
+    pointer-events: none;
+  }
+
+  body.player-hidden .scene-bar {
+    right: calc(12px + var(--safe-right));
+    bottom: calc(8px + var(--safe-bottom));
   }
 
   .scene-meta {
@@ -1939,98 +2106,13 @@ body.player-hidden .mini-player {
   }
 
   .chip {
-    height: 25px;
+    height: 26px;
     padding: 0 10px;
     font-size: 10.5px;
   }
 
-  .player {
-    left: 10px;
-    right: 10px;
-    bottom: calc(6px + var(--safe-bottom));
-    padding: 5px 12px;
-    border-radius: 14px;
-    grid-template-columns: minmax(110px, 1.1fr) minmax(170px, 2.2fr) auto;
-    grid-template-areas: none;
-    row-gap: 0;
-    gap: 10px;
-  }
-
-  .now {
-    grid-area: auto;
-    gap: 7px;
-  }
-
-  .cover {
-    width: 30px;
-    height: 30px;
-    border-radius: 7px;
-  }
-
-  .track-title {
-    font-size: 11.5px;
-    max-width: 130px;
-  }
-
-  .track-sub {
-    font-size: 9.5px;
-    max-width: 130px;
-  }
-
-  .badge {
-    display: none;
-  }
-
-  .center {
-    grid-area: auto;
-    gap: 2px;
-  }
-
-  .transport {
-    gap: 5px;
-  }
-
-  .tbtn {
-    width: 24px;
-    height: 24px;
-  }
-
-  .tbtn svg {
-    width: 14px;
-    height: 14px;
-  }
-
-  .playbtn {
-    width: 28px;
-    height: 28px;
-  }
-
-  .playbtn svg {
-    width: 12px;
-    height: 12px;
-  }
-
-  .timeline {
-    gap: 5px;
-  }
-
-  .time {
-    font-size: 9px;
-    width: 26px;
-  }
-
-  .side {
-    grid-area: auto;
-    gap: 2px;
-  }
-
-  .volume,
-  #btnShuffle,
-  #btnRepeat {
-    display: none;
-  }
-
-  body.player-hidden .scene-bar {
+  .mini-player {
+    right: calc(12px + var(--safe-right));
     bottom: calc(10px + var(--safe-bottom));
   }
 
@@ -2039,22 +2121,24 @@ body.player-hidden .mini-player {
   }
 
   .eq-panel {
-    bottom: calc(56px + var(--safe-bottom));
+    right: calc(var(--player-landscape-w) + 16px);
+    bottom: calc(10px + var(--safe-bottom));
     max-height: 82vh;
     padding: 12px;
   }
 
   .empty {
-    padding: 30px 16px 100px;
+    padding: 40px 16px;
+    padding-right: calc(var(--player-landscape-w) + 24px);
   }
 
   .empty h1 {
-    font-size: clamp(24px, 5vw, 32px);
+    font-size: clamp(26px, 5.5vw, 36px);
   }
 
   .empty-copy {
-    font-size: 11.5px;
-    margin-top: 6px;
+    font-size: 12px;
+    margin-top: 8px;
   }
 
   .cta {
@@ -2063,7 +2147,13 @@ body.player-hidden .mini-player {
   }
 
   .toast {
-    bottom: 70px;
+    bottom: 45px;
+    left: 20px;
+    transform: none;
+  }
+
+  .toast.is-visible {
+    transform: none;
   }
 }
 
