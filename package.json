@@ -29,7 +29,8 @@
     "productName": "Prism",
     "copyright": "Copyright © 2026 Prism",
     "asar": true,
-    "compression": "normal",
+    "compression": "maximum",
+    "electronLanguages": ["en-US"],
     "directories": {
       "output": "release",
       "buildResources": "build"
@@ -55,7 +56,8 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "Prism",
-      "artifactName": "Prism-Setup-${version}.${ext}"
+      "artifactName": "Prism-Setup-${version}.${ext}",
+      "differentialPackage": false
     },
     "portable": {
       "artifactName": "Prism-Portable-${version}.${ext}"
