@@ -1911,16 +1911,19 @@ body.player-hidden .mini-player {
   }
 }
 
-/* ---------- Mobile Landscape / Horizontal View: Player on Right-Hand Side ---------- */
+/* ---------- Mobile Landscape / Horizontal View: Player as a Side Dock ---------- */
 
-@media (orientation: landscape) and (max-height: 540px), (max-height: 480px) {
+@media (orientation: landscape) and (max-height: 580px), (max-height: 480px) {
   :root {
-    --player-landscape-w: min(270px, 34vw);
+    --player-dock-w: min(230px, 30vw);
   }
 
+  /* Keep topbar in the open visualizer area so it never touches the dock */
   .topbar {
     padding: 8px 14px;
-    right: calc(var(--player-landscape-w) + 16px);
+    left: 0;
+    right: calc(var(--player-dock-w) + 20px);
+    width: auto;
   }
 
   .brand-text {
@@ -1938,51 +1941,51 @@ body.player-hidden .mini-player {
     height: 14px;
   }
 
-  /* Right-hand side docked player */
+  /* Right-hand side floating dock - completely isolated from other components */
   .player {
     position: fixed;
     top: calc(8px + var(--safe-top));
     bottom: calc(8px + var(--safe-bottom));
     right: calc(8px + var(--safe-right));
     left: auto;
-    width: var(--player-landscape-w);
-    max-width: 290px;
+    width: var(--player-dock-w);
+    max-width: 250px;
     margin: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 10px;
-    padding: 12px 14px;
+    gap: 8px;
+    padding: 12px;
     border-radius: 18px;
-    background: var(--panel);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: -10px 0 35px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(30px) saturate(1.45);
-    -webkit-backdrop-filter: blur(30px) saturate(1.45);
-    z-index: 28;
+    background: rgba(10, 11, 18, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: -8px 0 32px -6px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(35px) saturate(1.5);
+    -webkit-backdrop-filter: blur(35px) saturate(1.5);
+    z-index: 32;
     transform: none;
-    transition: transform 0.45s var(--ease), opacity 0.4s var(--ease);
+    transition: transform 0.4s var(--ease), opacity 0.35s var(--ease);
   }
 
   body.is-idle .player,
   body.player-hidden .player {
     opacity: 0;
-    transform: translateX(calc(100% + 20px));
+    transform: translateX(calc(100% + 24px));
     pointer-events: none;
   }
 
-  /* Top of player card: Album art & track meta */
+  /* Top of dock: Album art & track metadata */
   .now {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 9px;
     width: 100%;
     min-width: 0;
   }
 
   .cover {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     border-radius: 8px;
     flex-shrink: 0;
   }
@@ -1993,7 +1996,8 @@ body.player-hidden .mini-player {
   }
 
   .track-title {
-    font-size: 12px;
+    font-size: 11.5px;
+    font-weight: 600;
     line-height: 1.25;
     white-space: nowrap;
     overflow: hidden;
@@ -2001,7 +2005,7 @@ body.player-hidden .mini-player {
   }
 
   .track-sub {
-    font-size: 10px;
+    font-size: 9.5px;
     margin-top: 1px;
     white-space: nowrap;
     overflow: hidden;
@@ -2012,11 +2016,11 @@ body.player-hidden .mini-player {
     display: none;
   }
 
-  /* Center of player card: Controls & Seek bar */
+  /* Center of dock: Transport controls & Timeline */
   .center {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 7px;
     width: 100%;
   }
 
@@ -2024,64 +2028,66 @@ body.player-hidden .mini-player {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
   }
 
   .tbtn {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
   }
 
   .tbtn svg {
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
   }
 
   .playbtn {
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
   }
 
   .playbtn svg {
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
   }
 
   .timeline {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     width: 100%;
   }
 
   .time {
-    font-size: 9.5px;
-    width: 28px;
+    font-size: 9px;
+    width: 25px;
   }
 
   .seek {
-    height: 14px;
+    height: 12px;
   }
 
-  /* Bottom of player card: Secondary actions */
+  /* Bottom of dock: Mute, Equalizer, Queue controls */
   .side {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     width: 100%;
     padding-top: 4px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
   }
 
   .volume {
     display: none;
   }
 
-  /* Visualizer stage stays full-screen; Scene bar docks bottom left */
+  /* Visualizer stage stays full-screen; Scene bar docks bottom left without touching the dock */
   .scene-bar {
     left: calc(12px + var(--safe-left));
-    right: calc(var(--player-landscape-w) + 20px);
+    right: calc(var(--player-dock-w) + 20px);
     bottom: calc(8px + var(--safe-bottom));
+    width: auto;
+    max-width: calc(100vw - var(--player-dock-w) - 30px);
     gap: 8px;
   }
 
@@ -2094,6 +2100,7 @@ body.player-hidden .mini-player {
   body.player-hidden .scene-bar {
     right: calc(12px + var(--safe-right));
     bottom: calc(8px + var(--safe-bottom));
+    max-width: none;
   }
 
   .scene-meta {
@@ -2116,20 +2123,42 @@ body.player-hidden .mini-player {
     bottom: calc(10px + var(--safe-bottom));
   }
 
+  /* Drawer opens from the LEFT so it never collides or intercepts the player dock on the right */
   .drawer {
-    width: min(340px, 85vw);
+    left: 0;
+    right: auto;
+    border-left: none;
+    border-right: 1px solid var(--line);
+    transform: translateX(-102%);
+    width: min(320px, calc(100vw - var(--player-dock-w) - 24px));
+    z-index: 45;
   }
 
+  .drawer.is-open {
+    transform: translateX(0);
+  }
+
+  .scrim {
+    right: calc(var(--player-dock-w) + 16px);
+  }
+
+  /* Equalizer panel opens on the LEFT side away from the player dock */
   .eq-panel {
-    right: calc(var(--player-landscape-w) + 16px);
+    left: calc(12px + var(--safe-left));
+    right: auto;
+    top: calc(8px + var(--safe-top));
     bottom: calc(10px + var(--safe-bottom));
-    max-height: 82vh;
-    padding: 12px;
+    width: min(340px, calc(100vw - var(--player-dock-w) - 24px));
+    max-height: calc(100vh - 20px);
+    z-index: 45;
+    padding: 14px;
+    border-radius: 18px;
   }
 
   .empty {
     padding: 40px 16px;
-    padding-right: calc(var(--player-landscape-w) + 24px);
+    padding-right: calc(var(--player-dock-w) + 24px);
+    max-width: calc(100vw - var(--player-dock-w) - 20px);
   }
 
   .empty h1 {
@@ -2149,7 +2178,9 @@ body.player-hidden .mini-player {
   .toast {
     bottom: 45px;
     left: 20px;
+    right: auto;
     transform: none;
+    max-width: calc(100vw - var(--player-dock-w) - 40px);
   }
 
   .toast.is-visible {
